@@ -27,8 +27,8 @@ var import_core2 = require("@keystone-6/core");
 
 // schemas/schema.ts
 var import_core = require("@keystone-6/core");
-var import_access2 = require("@keystone-6/core/access");
-var import_fields2 = require("@keystone-6/core/fields");
+var import_access3 = require("@keystone-6/core/access");
+var import_fields3 = require("@keystone-6/core/fields");
 
 // schemas/ProductSchema.ts
 var import_access = require("@keystone-6/core/access");
@@ -55,36 +55,55 @@ var ProductSchema_default = {
   }
 };
 
+// schemas/AddressSchema.ts
+var import_access2 = require("@keystone-6/core/access");
+var import_fields2 = require("@keystone-6/core/fields");
+var AddressSchema_default = {
+  access: import_access2.allowAll,
+  fields: {
+    address: (0, import_fields2.text)({ validation: { isRequired: true } }),
+    pincode: (0, import_fields2.text)({ validation: { isRequired: true } }),
+    city: (0, import_fields2.text)({ validation: { isRequired: true } }),
+    image: (0, import_fields2.image)({ storage: "my_local_images" }),
+    user: (0, import_fields2.relationship)({
+      ref: "User.address",
+      many: false
+    })
+  }
+};
+
 // schemas/schema.ts
 var lists = {
   User: (0, import_core.list)({
-    access: import_access2.allowAll,
+    access: import_access3.allowAll,
     fields: {
-      firstName: (0, import_fields2.text)({ validation: { isRequired: true } }),
-      lastName: (0, import_fields2.text)({ validation: { isRequired: true } }),
-      email: (0, import_fields2.text)({
+      firstName: (0, import_fields3.text)({ validation: { isRequired: true } }),
+      lastName: (0, import_fields3.text)({ validation: { isRequired: true } }),
+      email: (0, import_fields3.text)({
         validation: { isRequired: true },
         isIndexed: "unique"
       }),
-      mobile: (0, import_fields2.text)({
+      address: (0, import_fields3.relationship)({ ref: "Address.user", many: false }),
+      mobile: (0, import_fields3.text)({
         validation: { isRequired: true },
         isIndexed: "unique"
       }),
-      password: (0, import_fields2.password)({ validation: { isRequired: true } }),
-      createdAt: (0, import_fields2.timestamp)({
+      password: (0, import_fields3.password)({ validation: { isRequired: true } }),
+      createdAt: (0, import_fields3.timestamp)({
         defaultValue: { kind: "now" }
       })
     }
   }),
   Product: (0, import_core.list)(ProductSchema_default),
+  Address: (0, import_core.list)(AddressSchema_default),
   Tag: (0, import_core.list)({
-    access: import_access2.allowAll,
+    access: import_access3.allowAll,
     ui: {
       isHidden: true
     },
     fields: {
-      name: (0, import_fields2.text)(),
-      products: (0, import_fields2.relationship)({ ref: "Product.tags", many: true })
+      name: (0, import_fields3.text)(),
+      products: (0, import_fields3.relationship)({ ref: "Product.tags", many: true })
     }
   })
 };

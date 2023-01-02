@@ -6,6 +6,7 @@ type User {
   firstName: String
   lastName: String
   email: String
+  address: Address
   mobile: String
   password: PasswordState
   createdAt: DateTime
@@ -31,6 +32,7 @@ input UserWhereInput {
   firstName: StringFilter
   lastName: StringFilter
   email: StringFilter
+  address: AddressWhereInput
   mobile: StringFilter
   createdAt: DateTimeNullableFilter
 }
@@ -103,9 +105,16 @@ input UserUpdateInput {
   firstName: String
   lastName: String
   email: String
+  address: AddressRelateToOneForUpdateInput
   mobile: String
   password: String
   createdAt: DateTime
+}
+
+input AddressRelateToOneForUpdateInput {
+  create: AddressCreateInput
+  connect: AddressWhereUniqueInput
+  disconnect: Boolean
 }
 
 input UserUpdateArgs {
@@ -117,9 +126,15 @@ input UserCreateInput {
   firstName: String
   lastName: String
   email: String
+  address: AddressRelateToOneForCreateInput
   mobile: String
   password: String
   createdAt: DateTime
+}
+
+input AddressRelateToOneForCreateInput {
+  create: AddressCreateInput
+  connect: AddressWhereUniqueInput
 }
 
 type Product {
@@ -227,6 +242,69 @@ input TagRelateToManyForCreateInput {
   connect: [TagWhereUniqueInput!]
 }
 
+type Address {
+  id: ID!
+  address: String
+  pincode: String
+  city: String
+  image: ImageFieldOutput
+  user: User
+}
+
+input AddressWhereUniqueInput {
+  id: ID
+}
+
+input AddressWhereInput {
+  AND: [AddressWhereInput!]
+  OR: [AddressWhereInput!]
+  NOT: [AddressWhereInput!]
+  id: IDFilter
+  address: StringFilter
+  pincode: StringFilter
+  city: StringFilter
+  user: UserWhereInput
+}
+
+input AddressOrderByInput {
+  id: OrderDirection
+  address: OrderDirection
+  pincode: OrderDirection
+  city: OrderDirection
+}
+
+input AddressUpdateInput {
+  address: String
+  pincode: String
+  city: String
+  image: ImageFieldInput
+  user: UserRelateToOneForUpdateInput
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
+input AddressUpdateArgs {
+  where: AddressWhereUniqueInput!
+  data: AddressUpdateInput!
+}
+
+input AddressCreateInput {
+  address: String
+  pincode: String
+  city: String
+  image: ImageFieldInput
+  user: UserRelateToOneForCreateInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
 type Tag {
   id: ID!
   name: String
@@ -303,6 +381,12 @@ type Mutation {
   updateProducts(data: [ProductUpdateArgs!]!): [Product]
   deleteProduct(where: ProductWhereUniqueInput!): Product
   deleteProducts(where: [ProductWhereUniqueInput!]!): [Product]
+  createAddress(data: AddressCreateInput!): Address
+  createAddresses(data: [AddressCreateInput!]!): [Address]
+  updateAddress(where: AddressWhereUniqueInput!, data: AddressUpdateInput!): Address
+  updateAddresses(data: [AddressUpdateArgs!]!): [Address]
+  deleteAddress(where: AddressWhereUniqueInput!): Address
+  deleteAddresses(where: [AddressWhereUniqueInput!]!): [Address]
   createTag(data: TagCreateInput!): Tag
   createTags(data: [TagCreateInput!]!): [Tag]
   updateTag(where: TagWhereUniqueInput!, data: TagUpdateInput!): Tag
@@ -340,6 +424,9 @@ type Query {
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0): [Product!]
   product(where: ProductWhereUniqueInput!): Product
   productsCount(where: ProductWhereInput! = {}): Int
+  addresses(where: AddressWhereInput! = {}, orderBy: [AddressOrderByInput!]! = [], take: Int, skip: Int! = 0): [Address!]
+  address(where: AddressWhereUniqueInput!): Address
+  addressesCount(where: AddressWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0): [Tag!]
   tag(where: TagWhereUniqueInput!): Tag
   tagsCount(where: TagWhereInput! = {}): Int

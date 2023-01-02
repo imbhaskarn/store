@@ -1,3 +1,4 @@
+
 // Welcome to your schema
 //   Schema driven development is Keystone's modus operandi
 //
@@ -28,6 +29,7 @@ import { document } from "@keystone-6/fields-document";
 // the generated types from '.keystone/types'
 import type { Lists } from ".keystone/types";
 import ProductSchema from "./ProductSchema";
+import userAddress from "./AddressSchema";
 
 export const lists: Lists = {
   User: list({
@@ -49,6 +51,7 @@ export const lists: Lists = {
         // email as another user - this may or may not be a good idea for your project
         isIndexed: "unique",
       }),
+      address: relationship({ ref: "Address.user", many: false }),
       mobile: text({
         validation: { isRequired: true },
         isIndexed: "unique",
@@ -66,6 +69,7 @@ export const lists: Lists = {
   }),
 
   Product: list(ProductSchema),
+  Address: list(userAddress),
 
   // this last list is our Tag list, it only has a name field for now
   Tag: list({
