@@ -24,7 +24,8 @@ model User {
 
 model Product {
   id              String  @id @default(cuid())
-  title           String  @default("")
+  name            String  @default("")
+  price           Int
   description     String  @default("")
   image_filesize  Int?
   image_extension String?

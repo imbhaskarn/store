@@ -124,7 +124,8 @@ input UserCreateInput {
 
 type Product {
   id: ID!
-  title: String
+  name: String
+  price: Int
   description: String
   image: ImageFieldOutput
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0): [Tag!]
@@ -156,9 +157,21 @@ input ProductWhereInput {
   OR: [ProductWhereInput!]
   NOT: [ProductWhereInput!]
   id: IDFilter
-  title: StringFilter
+  name: StringFilter
+  price: IntFilter
   description: StringFilter
   tags: TagManyRelationFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
 }
 
 input TagManyRelationFilter {
@@ -169,12 +182,14 @@ input TagManyRelationFilter {
 
 input ProductOrderByInput {
   id: OrderDirection
-  title: OrderDirection
+  name: OrderDirection
+  price: OrderDirection
   description: OrderDirection
 }
 
 input ProductUpdateInput {
-  title: String
+  name: String
+  price: Int
   description: String
   image: ImageFieldInput
   tags: TagRelateToManyForUpdateInput
@@ -200,7 +215,8 @@ input ProductUpdateArgs {
 }
 
 input ProductCreateInput {
-  title: String
+  name: String
+  price: Int
   description: String
   image: ImageFieldInput
   tags: TagRelateToManyForCreateInput

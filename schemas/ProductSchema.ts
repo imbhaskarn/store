@@ -10,17 +10,9 @@ import { allowAll } from "@keystone-6/core/access";
 
 // see https://keystonejs.com/docs/fields/overview for the full list of fields
 //   this is a few common fields for an example
-import {
-  text,
-  relationship,
-  password,
-  timestamp,
-  integer,
-  select,
-  image,
-} from "@keystone-6/core/fields";
+import { text, relationship, integer, image } from "@keystone-6/core/fields";
 
-Product: list({
+export default {
   // WARNING
   //   for this starter project, anyone can create, query, update and delete anything
   //   if you want to prevent random people on the internet from accessing your data,
@@ -29,7 +21,8 @@ Product: list({
 
   // this is the fields for our Post list
   fields: {
-    title: text({ validation: { isRequired: true } }),
+    name: text({ validation: { isRequired: true } }),
+    price: integer({ validation: { isRequired: true } }),
 
     // the document field can be used for making rich editable content
     //   you can find out more at https://keystonejs.com/docs/guides/document-fields
@@ -55,4 +48,4 @@ Product: list({
       },
     }),
   },
-});
+}

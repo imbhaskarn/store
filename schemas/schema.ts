@@ -27,6 +27,7 @@ import { document } from "@keystone-6/fields-document";
 // when using Typescript, you can refine your types to a stricter subset by importing
 // the generated types from '.keystone/types'
 import type { Lists } from ".keystone/types";
+import ProductSchema from "./ProductSchema";
 
 export const lists: Lists = {
   User: list({
@@ -64,42 +65,7 @@ export const lists: Lists = {
     },
   }),
 
-  Product: list({
-    // WARNING
-    //   for this starter project, anyone can create, query, update and delete anything
-    //   if you want to prevent random people on the internet from accessing your data,
-    //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
-    access: allowAll,
-
-    // this is the fields for our Post list
-    fields: {
-      title: text({ validation: { isRequired: true } }),
-
-      // the document field can be used for making rich editable content
-      //   you can find out more at https://keystonejs.com/docs/guides/document-fields
-      description: text({ validation: { isRequired: true } }),
-      image: image({ storage: "my_local_images" }),
-      // with this field, you can set a User as the author for a Post
-
-      // with this field, you can add some Tags to Posts
-      tags: relationship({
-        // we could have used 'Tag', but then the relationship would only be 1-way
-        ref: "Tag.products",
-
-        // a Post can have many Tags, not just one
-        many: true,
-        // this is some customisations for changing how this will look in the AdminUI
-        ui: {
-          displayMode: "cards",
-          cardFields: ["name"],
-          inlineEdit: { fields: ["name"] },
-          linkToItem: true,
-          inlineConnect: true,
-          inlineCreate: { fields: ["name"] },
-        },
-      }),
-    },
-  }),
+  Product: list(ProductSchema),
 
   // this last list is our Tag list, it only has a name field for now
   Tag: list({
