@@ -27,8 +27,8 @@ var import_core2 = require("@keystone-6/core");
 
 // schemas/schema.ts
 var import_core = require("@keystone-6/core");
-var import_access3 = require("@keystone-6/core/access");
-var import_fields3 = require("@keystone-6/core/fields");
+var import_access4 = require("@keystone-6/core/access");
+var import_fields4 = require("@keystone-6/core/fields");
 
 // schemas/ProductSchema.ts
 var import_access = require("@keystone-6/core/access");
@@ -39,19 +39,8 @@ var ProductSchema_default = {
     name: (0, import_fields.text)({ validation: { isRequired: true } }),
     price: (0, import_fields.integer)({ validation: { isRequired: true } }),
     description: (0, import_fields.text)({ validation: { isRequired: true } }),
-    image: (0, import_fields.image)({ storage: "my_local_images" }),
-    tags: (0, import_fields.relationship)({
-      ref: "Tag.products",
-      many: true,
-      ui: {
-        displayMode: "cards",
-        cardFields: ["name"],
-        inlineEdit: { fields: ["name"] },
-        linkToItem: true,
-        inlineConnect: true,
-        inlineCreate: { fields: ["name"] }
-      }
-    })
+    category: (0, import_fields.relationship)({ ref: "Category", many: false }),
+    image: (0, import_fields.image)({ storage: "my_local_images" })
   }
 };
 
@@ -72,38 +61,52 @@ var AddressSchema_default = {
   }
 };
 
+// schemas/CartSchema.ts
+var import_access3 = require("@keystone-6/core/access");
+var import_fields3 = require("@keystone-6/core/fields");
+var CartSchema_default = {
+  access: import_access3.allowAll,
+  fields: {
+    user: (0, import_fields3.relationship)({
+      ref: "User",
+      many: false
+    }),
+    product: (0, import_fields3.relationship)({ ref: "Product", many: true })
+  }
+};
+
 // schemas/schema.ts
 var lists = {
   User: (0, import_core.list)({
-    access: import_access3.allowAll,
+    access: import_access4.allowAll,
     fields: {
-      firstName: (0, import_fields3.text)({ validation: { isRequired: true } }),
-      lastName: (0, import_fields3.text)({ validation: { isRequired: true } }),
-      email: (0, import_fields3.text)({
+      firstName: (0, import_fields4.text)({ validation: { isRequired: true } }),
+      lastName: (0, import_fields4.text)({ validation: { isRequired: true } }),
+      email: (0, import_fields4.text)({
         validation: { isRequired: true },
         isIndexed: "unique"
       }),
-      address: (0, import_fields3.relationship)({ ref: "Address.user", many: false }),
-      mobile: (0, import_fields3.text)({
+      address: (0, import_fields4.relationship)({ ref: "Address.user", many: false }),
+      mobile: (0, import_fields4.text)({
         validation: { isRequired: true },
         isIndexed: "unique"
       }),
-      password: (0, import_fields3.password)({ validation: { isRequired: true } }),
-      createdAt: (0, import_fields3.timestamp)({
+      password: (0, import_fields4.password)({ validation: { isRequired: true } }),
+      createdAt: (0, import_fields4.timestamp)({
         defaultValue: { kind: "now" }
       })
     }
   }),
   Product: (0, import_core.list)(ProductSchema_default),
   Address: (0, import_core.list)(AddressSchema_default),
-  Tag: (0, import_core.list)({
-    access: import_access3.allowAll,
+  Cart: (0, import_core.list)(CartSchema_default),
+  Category: (0, import_core.list)({
+    access: import_access4.allowAll,
     ui: {
       isHidden: true
     },
     fields: {
-      name: (0, import_fields3.text)(),
-      products: (0, import_fields3.relationship)({ ref: "Product.tags", many: true })
+      name: (0, import_fields4.text)()
     }
   })
 };

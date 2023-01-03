@@ -13,27 +13,32 @@ generator client {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  firstName String    @default("")
-  lastName  String    @default("")
-  email     String    @unique @default("")
-  address   Address?  @relation("Address_user")
-  mobile    String    @unique @default("")
-  password  String
-  createdAt DateTime? @default(now())
+  id             String    @id @default(cuid())
+  firstName      String    @default("")
+  lastName       String    @default("")
+  email          String    @unique @default("")
+  address        Address?  @relation("Address_user")
+  mobile         String    @unique @default("")
+  password       String
+  createdAt      DateTime? @default(now())
+  from_Cart_user Cart[]    @relation("Cart_user")
 }
 
 model Product {
-  id              String  @id @default(cuid())
-  name            String  @default("")
-  price           Int
-  description     String  @default("")
-  image_filesize  Int?
-  image_extension String?
-  image_width     Int?
-  image_height    Int?
-  image_id        String?
-  tags            Tag[]   @relation("Product_tags")
+  id                String    @id @default(cuid())
+  name              String    @default("")
+  price             Int
+  description       String    @default("")
+  category          Category? @relation("Product_category", fields: [categoryId], references: [id])
+  categoryId        String?   @map("category")
+  image_filesize    Int?
+  image_extension   String?
+  image_width       Int?
+  image_height      Int?
+  image_id          String?
+  from_Cart_product Cart[]    @relation("Cart_product")
+
+  @@index([categoryId])
 }
 
 model Address {
@@ -50,8 +55,17 @@ model Address {
   userId          String? @unique @map("user")
 }
 
-model Tag {
-  id       String    @id @default(cuid())
-  name     String    @default("")
-  products Product[] @relation("Product_tags")
+model Cart {
+  id      String    @id @default(cuid())
+  user    User?     @relation("Cart_user", fields: [userId], references: [id])
+  userId  String?   @map("user")
+  product Product[] @relation("Cart_product")
+
+  @@index([userId])
+}
+
+model Category {
+  id                    String    @id @default(cuid())
+  name                  String    @default("")
+  from_Product_category Product[] @relation("Product_category")
 }
