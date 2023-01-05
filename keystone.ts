@@ -6,10 +6,14 @@
 //   you can find out more at https://keystonejs.com/docs/apis/config
 
 import { config } from "@keystone-6/core";
-
+import User from "./schemas/User";
+import Product from "./schemas/Product";
+import Address from "./schemas/Address";
+import Category from "./schemas/Category";
+import CartItems from "./schemas/CartItems";
 // to keep this file tidy, we define our schema in a different file
-import { lists } from "./schemas/schema";
 
+import type { Lists } from ".keystone/types";
 // authentication is configured separately here too, but you might move this elsewhere
 // when you write your list-level access control functions, as they typically rely on session data
 import { withAuth, session } from "./auth";
@@ -40,7 +44,16 @@ export default withAuth(
         storagePath: "public/images",
       },
     },
-    lists,
+    lists: {
+      // Schema items go in here
+      User,
+      Product,
+      Category,
+      CartItems,
+      Address,
+      // Order,
+      // Role,
+    },
     session,
   })
 );
